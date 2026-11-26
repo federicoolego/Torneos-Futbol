@@ -22,8 +22,25 @@ Estadisticas-Futbol/
 ## 🔄 Flujo de actualización
 
 1. Cargás el torneo en el Google Sheet (pestaña **LOLO** o **FEDE**).
-2. En el Sheet: **⚽ Fútbol → Ver / copiar / descargar JSON**.
-3. Pegás el contenido en `data/torneos.json` (o reemplazás el archivo) y hacés commit.
+2. En el Sheet: **⚽ Fútbol → Publicar en GitHub (commit)**. Listo: el script commitea `data/torneos.json`
+   y GitHub Pages se republica solo (~1 min). Si lo único que cambió es la fecha `actualizado`, no hace commit.
+
+*Alternativa manual:* **⚽ Fútbol → Ver / copiar / descargar JSON**, pegás en `data/torneos.json` y commit.
+
+### 🔑 Alta de la publicación automática (una sola vez)
+
+1. GitHub → Settings → Developer settings → Personal access tokens → **Fine-grained tokens** → *Generate new token*.
+   - Repository access: **Only select repositories → Torneos-Futbol**
+   - Permissions → Repository → **Contents: Read and write** (nada más)
+   - Poné vencimiento (ej. 1 año) y anotá la fecha para renovarlo.
+2. En el Sheet: **⚽ Fútbol → Configurar token de GitHub** y pegás el token. Queda en *Propiedades del script*,
+   no en el código ni en una celda.
+3. **⚽ Fútbol → Publicar en GitHub**. La primera vez Google pide autorizar "conectarse a un servicio externo".
+4. Opcional: **⚽ Fútbol → Activar publicación diaria automática** (~6 AM; si falla te llega un mail).
+
+Si el proyecto de Apps Script tiene `appsscript.json` con `oauthScopes` explícitos, agregá
+`https://www.googleapis.com/auth/script.external_request` (y `script.scriptapp`, `script.send_mail` para el trigger y el mail de error).
+Quien pueda **editar** el script puede ver el token: no compartas el Sheet con permiso de edición a quien no corresponda.
 
 Instalación del script: ver el encabezado de `apps-script/Exportar-Torneos-JSON.gs`.
 
