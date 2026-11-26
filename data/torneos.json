@@ -12,7 +12,18 @@
     {
       "clave": "fede",
       "nombre": "Fede",
-      "torneos": []
+      "torneos": [
+        {"id": 1, "anio": 2021, "equipo": "Defensores", "torneo": "Primera División B", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": false, "semifinal": true, "final": true, "puesto": "campeon"},
+        {"id": 2, "anio": 2022, "equipo": "Defensores", "torneo": "Primera División", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": true, "semifinal": true, "final": false, "puesto": "semifinal"},
+        {"id": 3, "anio": 2022, "equipo": "Defensores", "torneo": "Primera División", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": true, "semifinal": true, "final": true, "puesto": "campeon"},
+        {"id": 4, "anio": 2023, "equipo": "Defensores", "torneo": "Primera División", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": true, "semifinal": true, "final": true, "puesto": "campeon"},
+        {"id": 5, "anio": 2023, "equipo": "Defensores", "torneo": "Preclasificatorio Copa Arg 2024", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": false, "semifinal": false, "final": false, "puesto": "zona"},
+        {"id": 6, "anio": 2023, "equipo": "Defensores", "torneo": "Regional Pre Nacional 2023", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": false, "semifinal": false, "final": false, "puesto": "campeon"},
+        {"id": 7, "anio": 2023, "equipo": "Defensores", "torneo": "Primera División", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": true, "semifinal": true, "final": true, "puesto": "subcampeon"},
+        {"id": 8, "anio": 2024, "equipo": "Defensores", "torneo": "Primera División", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": true, "semifinal": false, "final": false, "puesto": "cuartos"},
+        {"id": 9, "anio": 2024, "equipo": "Defensores", "torneo": "Copa Nicoleña", "categoria": "Futsal", "zona": true, "octavos": false, "cuartos": true, "semifinal": true, "final": false, "puesto": "semifinal"},
+        {"id": 10, "anio": 2024, "equipo": "Defensores", "torneo": "Finalisima", "categoria": "Futsal", "zona": false, "octavos": false, "cuartos": false, "semifinal": false, "final": true, "puesto": "subcampeon"}
+      ]
     }
   ]
 }
