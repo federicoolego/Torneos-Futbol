@@ -11,7 +11,9 @@
     {
       "clave": "fede",
       "nombre": "Fede",
-      "torneos": []
+      "torneos": [
+        {"id": 1, "anio": 2026, "equipo": "RVT", "torneo": "prueba", "zona": true, "octavos": true, "cuartos": true, "semifinal": true, "final": true, "puesto": "subcampeon"}
+      ]
     }
   ]
 }
