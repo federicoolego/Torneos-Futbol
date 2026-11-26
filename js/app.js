@@ -187,15 +187,15 @@
           <h3>Equipo · torneos y % podios</h3>
           <div class="chart-box"><canvas id="${id("chart-equipo")}"></canvas></div>
         </div>
-        <div class="card">
-          <h3>Torneo · top 8 más jugados</h3>
+        <div class="card full">
+          <h3>Torneo · top 5 más jugados</h3>
           <div class="chart-box"><canvas id="${id("chart-torneo")}"></canvas></div>
         </div>
-        <div class="card full" id="${id("card-categoria")}">
+        <div class="card" id="${id("card-categoria")}">
           <h3>Categoría · torneos y % podios</h3>
           <div class="chart-box"><canvas id="${id("chart-categoria")}"></canvas></div>
         </div>
-        <div class="card">
+        <div class="card" id="${id("card-instancia")}">
           <h3>Instancia en la que terminó · distribución</h3>
           <div class="chart-box"><canvas id="${id("chart-instancia")}"></canvas></div>
         </div>
@@ -578,9 +578,10 @@
 
       comboBar("chart-anio", "anio", { groupBy: t => (t.anio ? String(t.anio) : null), order: "cronologico" });
       comboBar("chart-equipo", "equipo", { groupBy: t => t.equipo, order: "tj" });
-      comboBar("chart-torneo", "torneo", { groupBy: t => t.torneo, order: "tj", limit: 8 });
+      comboBar("chart-torneo", "torneo", { groupBy: t => t.torneo, order: "tj", limit: 5 });
       const hasCat = done.some(t => t.categoria);
       el("card-categoria").hidden = !hasCat;
+      el("card-instancia").classList.toggle("full", !hasCat);
       if (hasCat) comboBar("chart-categoria", "categoria", { groupBy: t => t.categoria, order: "natural" });
       else destroyChart("categoria");
 
