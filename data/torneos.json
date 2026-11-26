@@ -5,7 +5,7 @@
       "clave": "lolo",
       "nombre": "Lolo",
       "torneos": [
-        {"id": 1, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Torneo Amistad - GRUD", "zona": true, "octavos": false, "cuartos": false, "semifinal": true, "final": true, "puesto": "campeon"}
+        {"id": 1, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Torneo Amistad - GRUD", "categoria": null, "zona": true, "octavos": false, "cuartos": false, "semifinal": true, "final": true, "puesto": "campeon"}
       ]
     }
   ]

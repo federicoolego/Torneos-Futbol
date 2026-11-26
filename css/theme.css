@@ -137,4 +137,4 @@ html[data-theme="light"] .badge.b-gray { background: rgba(93,104,120,0.12); colo
 .tabla th.c-chk, .tabla td.c-chk { text-align: center; }
 .tabla .dim { color: var(--muted); opacity: .5; }
 .tab-content > .empty { background: var(--panel); border: 1px dashed var(--border); border-radius: 14px; margin-bottom: 20px; }
-.grid[hidden], .empty[hidden] { display: none; }
+.grid[hidden], .empty[hidden], .card[hidden] { display: none; }

@@ -37,7 +37,7 @@ Instalación del script: ver el encabezado de `apps-script/Exportar-Torneos-JSON
       "clave": "lolo",
       "nombre": "Lolo",
       "torneos": [
-        {"id": 1, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Torneo Amistad - GRUD",
+        {"id": 1, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Torneo Amistad - GRUD", "categoria": "F8",
          "zona": true, "octavos": false, "cuartos": false, "semifinal": true, "final": true,
          "puesto": "campeon"}
       ]
@@ -46,11 +46,22 @@ Instalación del script: ver el encabezado de `apps-script/Exportar-Torneos-JSON
 }
 ```
 
+- `categoria`: modalidad del torneo — `F5`, `F6`, `F7`, `F8`, `F9`, `F11`, `Futsal` (o `null` si no se cargó).
+  El script y la app normalizan variantes: `Fútbol 5` / `f-5` → `F5`, `salón` → `Futsal`. Cualquier otro texto se respeta tal cual.
 - `zona / octavos / cuartos / semifinal / final`: `true` si hay ✅ en el Excel.
 - `puesto`: `campeon` · `subcampeon` · `semifinal` · `cuartos` · `octavos` · `zona` · `null` (sin puesto todavía).
   Equivale al dropdown del Excel: 🥇Campeón · 🥈Subcampeón · Semifinal · 4️⃣tos · 8️⃣vos · Zona.
 - Las pestañas de la app se arman solas con `jugadores`. Para sumar una persona: nueva pestaña en el Sheet,
   una línea en `JUGADORES` del script y listo.
+
+## 🏷️ Columna CATEGORÍA en el Sheet
+
+En cada pestaña (LOLO y FEDE) agregá una columna **CATEGORÍA** (la posición da igual: el script mapea por nombre).
+Conviene ponerle validación de datos (Datos → Validación de datos → Lista de elementos):
+`F5, F6, F7, F8, F9, F11, Futsal` — así no hay typos y los filtros/gráficos agrupan bien.
+
+En la app aparece como filtro **Categoría**, columna **Cat.** en la tabla y un gráfico *Categoría · torneos y % podios*
+(se oculta solo si ningún torneo tiene categoría cargada).
 
 ## 📊 Cómo se calculan las estadísticas
 

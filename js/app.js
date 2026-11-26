@@ -51,12 +51,23 @@
     const k = slug(v);
     return k ? (PUESTO_ALIAS[k] || null) : null;
   }
+  // "futbol 5" / "Fútbol 5" / "f-5" → "F5" · "salon" / "Futsal" → "Futsal" · otro texto → tal cual
+  function normCategoria(v) {
+    const raw = String(v == null ? "" : v).trim();
+    if (!raw) return "";
+    const k = slug(raw);
+    const m = /^(?:f|fut|futbol)(\d{1,2})$/.exec(k);
+    if (m) return "F" + m[1];
+    if (/^(futsal|futbolsalon|futbolsala|salon)$/.test(k)) return "Futsal";
+    return raw;
+  }
   function normRow(r, i) {
     const t = {
       id: Number(r.id) || i + 1,
       anio: r.anio === null || r.anio === undefined || r.anio === "" ? null : Number(r.anio),
       equipo: r.equipo || "",
       torneo: r.torneo || "",
+      categoria: normCategoria(r.categoria),
       puesto: normPuesto(r.puesto)
     };
     FLAGS.forEach(f => { t[f] = r[f] === true; });
@@ -88,7 +99,7 @@
     const id = (s) => `${k}-${s}`;
     const el = (s) => $(id(s));
 
-    const filters = { anio: [], equipo: [], torneo: [], puesto: [], lastN: null };
+    const filters = { anio: [], equipo: [], torneo: [], categoria: [], puesto: [], lastN: null };
     const combos = {};
     const charts = {};
     let initialized = false;
@@ -132,6 +143,7 @@
         ${comboHTML("anio", "Año", "Todos")}
         ${comboHTML("equipo", "Equipo", "Todos", true)}
         ${comboHTML("torneo", "Torneo", "Todos", true)}
+        ${comboHTML("categoria", "Categoría", "Todos")}
         ${comboHTML("puesto", "Puesto", "Todos")}
         <div class="field"><label>Últimos N</label>
           <input type="number" id="${id("last-n")}" class="last-n-input" min="1" max="100" step="1" placeholder="Todos"
@@ -179,6 +191,10 @@
           <h3>Torneo · top 8 más jugados</h3>
           <div class="chart-box"><canvas id="${id("chart-torneo")}"></canvas></div>
         </div>
+        <div class="card full" id="${id("card-categoria")}">
+          <h3>Categoría · torneos y % podios</h3>
+          <div class="chart-box"><canvas id="${id("chart-categoria")}"></canvas></div>
+        </div>
         <div class="card">
           <h3>Instancia en la que terminó · distribución</h3>
           <div class="chart-box"><canvas id="${id("chart-instancia")}"></canvas></div>
@@ -195,7 +211,7 @@
           <table class="tabla">
             <thead>
               <tr>
-                <th>#</th><th>Año</th><th>Equipo</th><th>Torneo</th>
+                <th>#</th><th>Año</th><th>Equipo</th><th>Torneo</th><th>Cat.</th>
                 <th class="c-chk">Zona</th><th class="c-chk">Octavos</th><th class="c-chk">Cuartos</th>
                 <th class="c-chk">Semi</th><th class="c-chk">Final</th><th>Puesto</th>
               </tr>
@@ -230,6 +246,7 @@
       setupCombo("combo-anio", uniqueSorted("anio").map(v => [String(v), String(v)]), "anio", "Todos");
       setupCombo("combo-equipo", uniqueSorted("equipo").map(v => [v, v]), "equipo", "Todos");
       setupCombo("combo-torneo", uniqueSorted("torneo").map(v => [v, v]), "torneo", "Todos");
+      setupCombo("combo-categoria", uniqueSorted("categoria").map(v => [v, v]), "categoria", "Todos");
       const puestos = [];
       ["campeon", "subcampeon", "semifinal", "cuartos", "octavos", "zona"].forEach(p => {
         if (ALL.some(t => t.puesto === p)) {
@@ -367,6 +384,7 @@
       let list = ALL.filter(t =>
         (!f.equipo.length || f.equipo.includes(t.equipo)) &&
         (!f.torneo.length || f.torneo.includes(t.torneo)) &&
+        (!f.categoria.length || f.categoria.includes(t.categoria)) &&
         (!f.anio.length || f.anio.includes(String(t.anio))) &&
         matchPuesto(t, f.puesto)
       );
@@ -447,7 +465,7 @@
       const rows = [...data].sort((a, b) => a.id - b.id);
       el("tabla-count").textContent = `${rows.length} torneo${rows.length === 1 ? "" : "s"}`;
       if (!rows.length) {
-        tbody.innerHTML = `<tr><td colspan="10" class="empty">${ALL.length ? "No hay torneos con estos filtros." : "Todavía no hay torneos cargados."}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="empty">${ALL.length ? "No hay torneos con estos filtros." : "Todavía no hay torneos cargados."}</td></tr>`;
         return;
       }
       tbody.innerHTML = rows.map(t => `<tr>
@@ -455,6 +473,7 @@
         <td>${t.anio || "—"}</td>
         <td>${esc(t.equipo) || "—"}</td>
         <td>${esc(t.torneo) || "—"}</td>
+        <td class="c-cat">${t.categoria ? `<span class="badge b-cat">${esc(t.categoria)}</span>` : '<span class="dim">—</span>'}</td>
         ${FLAGS.map(f => `<td class="c-chk">${t[f] ? "✅" : '<span class="dim">·</span>'}</td>`).join("")}
         <td class="c-res">${puestoBadge(t)}</td>
       </tr>`).join("");
@@ -512,6 +531,7 @@
         const tot = g => g.camp + g.sub + g.sinPodio;
         let keys = Object.keys(groups);
         if (opts.order === "cronologico") keys.sort();
+        else if (opts.order === "natural") keys.sort((a, b) => a.localeCompare(b, "es", { numeric: true })); // F5, F8, F11, Futsal
         else keys.sort((a, b) => tot(groups[b]) - tot(groups[a]) || a.localeCompare(b, "es"));
         if (opts.limit) keys = keys.slice(0, opts.limit);
         const labels = keys.map(key => trunc(key, 22));
@@ -559,6 +579,10 @@
       comboBar("chart-anio", "anio", { groupBy: t => (t.anio ? String(t.anio) : null), order: "cronologico" });
       comboBar("chart-equipo", "equipo", { groupBy: t => t.equipo, order: "tj" });
       comboBar("chart-torneo", "torneo", { groupBy: t => t.torneo, order: "tj", limit: 8 });
+      const hasCat = done.some(t => t.categoria);
+      el("card-categoria").hidden = !hasCat;
+      if (hasCat) comboBar("chart-categoria", "categoria", { groupBy: t => t.categoria, order: "natural" });
+      else destroyChart("categoria");
 
       titulosTimeline(done);
       topEquipos(done);
@@ -928,8 +952,8 @@
     }
 
     // ------------------------------ WhatsApp ------------------------------
-    const FILTER_LABELS = { anio: "Año", equipo: "Equipo", torneo: "Torneo", puesto: "Puesto", lastN: "Últimos" };
-    const FILTER_ORDER = ["anio", "equipo", "torneo", "puesto", "lastN"];
+    const FILTER_LABELS = { anio: "Año", equipo: "Equipo", torneo: "Torneo", categoria: "Categoría", puesto: "Puesto", lastN: "Últimos" };
+    const FILTER_ORDER = ["anio", "equipo", "torneo", "categoria", "puesto", "lastN"];
     const PUESTO_SHORT = { campeon: "Campeón", subcampeon: "Subcampeón", semifinal: "Semifinal",
       cuartos: "Cuartos", octavos: "Octavos", zona: "Zona", en_curso: "En curso" };
 

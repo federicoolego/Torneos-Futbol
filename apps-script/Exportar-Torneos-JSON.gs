@@ -130,6 +130,10 @@ function filasATorneos_(valores, nombreHoja, avisos) {
     return [];
   }
 
+  if (cols['categoria'] === undefined && cols['categorias'] === undefined) {
+    avisos.push('En "' + nombreHoja + '" no encontré la columna CATEGORÍA (F5, F8, F11, Futsal...). Se exporta vacía.');
+  }
+
   var idCol = cols['#'] !== undefined ? cols['#'] : cols['n'];
   var torneos = [];
   var secuencia = 0;
@@ -142,6 +146,7 @@ function filasATorneos_(valores, nombreHoja, avisos) {
     var equipo = texto_(get('equipo'));
     var torneo = texto_(get('torneo'));
     var puestoCrudo = texto_(get('puesto'));
+    var categoriaCruda = texto_(get('categoria') || get('categorias'));
     var marcas = {
       zona: marcado_(get('zona')),
       octavos: marcado_(get('octavos')),
@@ -151,7 +156,7 @@ function filasATorneos_(valores, nombreHoja, avisos) {
     };
 
     // La columna # viene pre-numerada (1..10) aunque la fila esté vacía: no cuenta como dato.
-    var vacia = anio === null && !equipo && !torneo && !puestoCrudo &&
+    var vacia = anio === null && !equipo && !torneo && !puestoCrudo && !categoriaCruda &&
       !(marcas.zona || marcas.octavos || marcas.cuartos || marcas.semifinal || marcas.final);
     if (vacia) continue;
 
@@ -169,11 +174,18 @@ function filasATorneos_(valores, nombreHoja, avisos) {
       avisos.push('"' + nombreHoja + '" fila ' + (i + 1) + ': sin PUESTO → la app lo muestra "En curso" y no lo cuenta en las estadísticas.');
     }
 
+    // CATEGORÍA (modalidad): F5, F8, F11, Futsal... Si la columna existe pero la fila no la tiene, avisa.
+    var categoria = categoria_(categoriaCruda);
+    if (!categoria && (cols['categoria'] !== undefined || cols['categorias'] !== undefined)) {
+      avisos.push('"' + nombreHoja + '" fila ' + (i + 1) + ': sin CATEGORÍA → se exporta vacía.');
+    }
+
     torneos.push({
       id: id,
       anio: anio,
       equipo: equipo,
       torneo: torneo,
+      categoria: categoria,
       zona: marcas.zona,
       octavos: marcas.octavos,
       cuartos: marcas.cuartos,
@@ -218,6 +230,22 @@ function marcado_(v) {
   if (!s) return false;
   return /✅|✔|☑|✓/.test(s) || /^(x|si|sí|true|1)$/i.test(s);
 }
+
+/**
+ * CATEGORÍA → texto normalizado (misma lógica que app.js).
+ *  "futbol 5" / "Fútbol 5" / "f-5" → "F5" · "salon" / "futsal" → "Futsal" · cualquier otro texto → tal cual.
+ *  Vacío → null.
+ */
+function categoria_(crudo) {
+  var raw = texto_(crudo);
+  if (!raw) return null;
+  var k = quitarTildes_(raw).toLowerCase().replace(/[^a-z0-9]/g, '');
+  var m = /^(?:f|fut|futbol)(\d{1,2})$/.exec(k);
+  if (m) return 'F' + m[1];
+  if (/^(futsal|futbolsalon|futbolsala|salon)$/.test(k)) return 'Futsal';
+  return raw;
+}
+
 
 /**
  * Dropdown del Excel → código del JSON.
@@ -267,7 +295,7 @@ function formatear_(obj) {
 
 /** Un torneo en una sola línea: {"id": 1, "anio": 2026, ...} */
 function lineaTorneo_(t) {
-  var orden = ['id', 'anio', 'equipo', 'torneo', 'zona', 'octavos', 'cuartos', 'semifinal', 'final', 'puesto'];
+  var orden = ['id', 'anio', 'equipo', 'torneo', 'categoria', 'zona', 'octavos', 'cuartos', 'semifinal', 'final', 'puesto'];
   return '{' + orden.map(function (k) { return '"' + k + '": ' + JSON.stringify(t[k]); }).join(', ') + '}';
 }
 
