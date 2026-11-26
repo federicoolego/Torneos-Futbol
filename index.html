@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" class="auth-checking auth-pending">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="dark">
+  <title>Fútbol · Estadísticas</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css?v=1">
+  <link rel="stylesheet" href="css/admin.css?v=1">
+  <link rel="stylesheet" href="css/theme.css?v=1">
+  <script src="js/theme.js?v=1"></script>
+</head>
+
+<body>
+
+  <!-- ================= LOGIN OBLIGATORIO ================= -->
+  <div id="auth-gate" class="auth-gate">
+    <div class="admin-modal auth-gate-card" role="dialog" aria-modal="true" aria-labelledby="auth-gate-title">
+      <div class="auth-gate-brand">⚽</div>
+      <h2 class="admin-title" id="auth-gate-title">Fútbol · Estadísticas</h2>
+      <p class="auth-gate-checking">Verificando sesión…</p>
+      <form id="auth-gate-form" class="admin-form auth-gate-form">
+        <p class="admin-sub">Ingresá con tu usuario para ver las estadísticas.</p>
+        <label>Email
+          <input type="email" name="email" required autocomplete="username">
+        </label>
+        <label>Contraseña
+          <input type="password" name="password" required autocomplete="current-password">
+        </label>
+        <p class="admin-err" id="auth-gate-err" hidden></p>
+        <div class="admin-actions">
+          <button type="submit" class="admin-btn primary">Entrar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Barra de controles arriba a la derecha -->
+  <div class="topbar">
+    <button id="admin-toggle" class="admin-toggle" aria-label="Sesión" title="Sesión">
+      <span class="admin-toggle-icon">🔒</span>
+      <span class="admin-toggle-label">Sesión</span>
+    </button>
+    <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar a tema claro" title="Cambiar a tema claro">
+      <span class="theme-toggle-icon" aria-hidden="true">☀️</span>
+    </button>
+  </div>
+
+  <div class="wrap">
+
+    <!-- Tabs: se arman solas desde data/torneos.json (una por jugador) -->
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Jugadores"></nav>
+
+    <!-- Un contenedor por jugador: lo llena js/app.js -->
+    <div id="tab-contents"></div>
+
+    <footer>
+      <span><code>Estadísticas de Fútbol</code></span>
+      <span><code>Lolo &amp; Fede</code></span>
+    </footer>
+  </div>
+
+  <button id="wa-share" class="wa-fab" aria-label="Compartir estadísticas por WhatsApp" title="Compartir estadísticas">
+    <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+      <path fill="#fff"
+        d="M16 3C9.4 3 4 8.4 4 15c0 2.1.6 4.2 1.6 6L4 27l6.2-1.6c1.7 1 3.7 1.5 5.8 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-1.9 0-3.7-.5-5.3-1.5l-.4-.2-3.7 1 1-3.6-.2-.4c-1-1.6-1.6-3.5-1.6-5.5C5.8 9.4 10.4 4.8 16 4.8S26.2 9.4 26.2 15 21.6 24.8 16 24.8zm5.6-7.3c-.3-.2-1.8-.9-2.1-1-.3-.1-.5-.2-.7.2-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.2-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4z" />
+    </svg>
+  </button>
+
+  <!-- Supabase: SOLO para el login -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js?v=1"></script>
+  <script src="js/auth-gate.js?v=1"></script>
+
+  <!-- App -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="js/app.js?v=1"></script>
+</body>
+
+</html>

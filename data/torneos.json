@@ -1,0 +1,17 @@
+{
+  "actualizado": "2026-11-26",
+  "jugadores": [
+    {
+      "clave": "lolo",
+      "nombre": "Lolo",
+      "torneos": [
+        {"id": 1, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Torneo Amistad - GRUD", "zona": true, "octavos": false, "cuartos": false, "semifinal": true, "final": true, "puesto": "campeon"}
+      ]
+    },
+    {
+      "clave": "fede",
+      "nombre": "Fede",
+      "torneos": []
+    }
+  ]
+}
