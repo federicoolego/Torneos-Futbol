@@ -5,8 +5,14 @@
       "clave": "lolo",
       "nombre": "Lolo",
       "torneos": [
-        {"id": 1, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Torneo Amistad - GRUD", "categoria": null, "zona": true, "octavos": false, "cuartos": false, "semifinal": true, "final": true, "puesto": "campeon"}
+        {"id": 1, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Torneo Amistad - GRUD", "categoria": "Fútbol Infantil", "zona": true, "octavos": false, "cuartos": false, "semifinal": true, "final": true, "puesto": "campeon"},
+        {"id": 2, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Nocturno Don Bosco", "categoria": "Fútbol Infantil", "zona": true, "octavos": false, "cuartos": false, "semifinal": false, "final": false, "puesto": null}
       ]
+    },
+    {
+      "clave": "fede",
+      "nombre": "Fede",
+      "torneos": []
     }
   ]
 }
