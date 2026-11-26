@@ -7,13 +7,6 @@
       "torneos": [
         {"id": 1, "anio": 2026, "equipo": "Sanchez F.C", "torneo": "Torneo Amistad - GRUD", "zona": true, "octavos": false, "cuartos": false, "semifinal": true, "final": true, "puesto": "campeon"}
       ]
-    },
-    {
-      "clave": "fede",
-      "nombre": "Fede",
-      "torneos": [
-        {"id": 1, "anio": 2026, "equipo": "RVT", "torneo": "prueba", "zona": true, "octavos": true, "cuartos": true, "semifinal": true, "final": true, "puesto": "subcampeon"}
-      ]
     }
   ]
 }
